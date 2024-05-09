@@ -1,0 +1,89 @@
+---
+title: "HW2"
+output: pdf_document
+date: "09/05/2024"
+header-includes:
+   - \usepackage{amsmath}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Q1(a) \begin{align*} 
+R(T,a,b) &= MSE_{a,b}(T(X))\\
+&= Var_{a,b}(T(X)) + (Bias_{a,b}(T(X)))^{2}\\
+\end{align*} \begin{align*}
+Var_{a,b}(T(X)) &= Var_{a,b}(\frac{1}{n}\sum_{i=1}^{n}X_{i})\\
+&= \frac{1}{n^{2}}\sum_{i=1}^{n}Var_{a,b}(X_{i})\\
+&= \frac{b^{2}\pi^{2}}{3n}\\
+\end{align*} \begin{align*}
+(Bias_{a,b}(T(X)))^{2} &= (\mathbb{E}_{a,b}(T(X))-a)^{2}\\
+&= (\mathbb{E}_{a,b}(\frac{1}{n}\sum_{i=1}^{n}X_{i})-a)^{2}\\
+&= (\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}_{a,b}(X_{i})-a)^{2}\\
+&= (\frac{1}{n}\sum_{i=1}^{n}a-a)^{2}\\
+&= 0\\
+\end{align*} \begin{align*}
+R(T,a,b) &= Var_{a,b}(T(X)) + (Bias_{a,b}(T(X)))^{2}\\
+&= \frac{b^{2}\pi^{2}}{3n}\\
+\end{align*} (b) \begin{align*}
+R(U,a,b) &= MSE_{a,b}(U(X,c))\\
+&= Var_{a,b}(U(X,c)) + (Bias_{a,b}(U(X,c)))^{2}\\
+\end{align*} \begin{align*}
+Var_{a,b}(U(X,c)) &= Var_{a,b}(\frac{c}{2}+\frac{1}{2n}\sum_{i=1}^{n}X_{i})\\
+&= \frac{1}{4n^{2}}\sum_{i=1}^{n}Var_{a,b}(X_{i})\\
+&= \frac{b^{2}\pi^{2}}{12n}\\
+\end{align*} \begin{align*}
+(Bias_{a,b}(U(X,c)))^{2} &= (\mathbb{E}_{a,b}(U(X,c))-a)^{2}\\
+&= (\mathbb{E}_{a,b}(\frac{c}{2}+\frac{1}{2n}\sum_{i=1}^{n}X_{i})-a)^{2}\\
+&= (\frac{c}{2}+\frac{1}{2n}\sum_{i=1}^{n}\mathbb{E}_{a,b}(X_{i})-a)^{2}\\
+&= (\frac{c}{2}+\frac{1}{2n}\sum_{i=1}^{n}a-a)^{2}\\
+&= (\frac{c}{2}+\frac{a}{2}-a)^{2}\\
+&= \frac{(c-a)^{2}}{4}\\
+\end{align*} \begin{align*}
+R(U,a,b) &= Var_{a,b}(U(X,c)) + (Bias_{a,b}(U(X,c)))^{2}\\
+&= \frac{b^{2}\pi^{2}}{12n}+\frac{(c-a)^{2}}{4}\\
+\end{align*} (c) Given $a\in[-5,5],b=3,c=1$ and $n=10$.
+
+```{r risk, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3, fig.width=5, fig.align="center"}
+# Initialize parameters
+a = seq(-5, 5, by = 0.001) # Produce 10000 values for the parameter of interest
+b = 3
+c = 1
+n = 10
+
+# Create function to calculate Risk as a function of the parameters values and estimator
+T = b^2*pi^2/(3*n)
+
+# Evaluate this function for different parameter values and estimators
+U = T/4+(c-a)^2/4
+
+# Load necessary packages to plot risk functions
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(grid)
+library(gridExtra)
+library(ggthemes)
+
+# Group risk function in a data frame
+df = data.frame("a" = a, "T" = T, "U"=U)
+colors <- c("T (X)" = "red", "U (X,c)" = "blue")
+
+# Plot result with labels
+ggplot() + 
+  geom_line(data = df, aes(x = a, y = T, color = "T (X)"), size = 1.2, linetype = "dashed") +
+  geom_line(data = df, aes(x = a, y = U, color = "U (X,c)"), size = 1.2, linetype = "dashed") +
+  xlab("a") +
+  ylab("Risk")+
+  xlim(c(-5.0, 5.0))+
+  ylim(c(0.000, 10.000))+
+  labs(title = "Risk function comparison", color = "Estimators")+
+  scale_color_manual(values = colors)+theme_economist_white()+scale_fill_economist()+
+  theme(plot.title = element_text(size=12, hjust = 0))+
+  theme(axis.text=element_text(size=8), axis.title=element_text(size=10,face="bold"), legend.text = element_text(size = 8), legend.title = element_text(size = 8))
+
+
+```
+
+(d) Observed that T(X) is constant with respect to a, the minimax estimator is $T(X) = \operatorname*{argmin}_{\{T,U\}}\max_{a} R$.

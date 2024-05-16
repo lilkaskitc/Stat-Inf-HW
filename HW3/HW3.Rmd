@@ -1,0 +1,43 @@
+---
+title: "HW3"
+output:  pdf_document
+date: "15/05/2024"
+header-includes:
+   - \usepackage{amsmath}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1(a)\
+For $X_{i}\overset{i.i.d.}\sim {\sf Bin}(1, \pi),\ \mathbb{E}(X_{i})=\pi$,\
+$\mathbb{E}(U(X)) = \mathbb{E}(\sum_{i=1}^{n}X_{i}) = \sum_{i=1}^{n} \mathbb{E}(X_{i}) = n\pi$\
+$\Rightarrow$ U(X) is biased for $\pi$.\
+
+(b)\
+Given that U(X) is sufficient statistic for $\pi$, U(X) will be minimal sufficient if proved completeness.\
+Note $U(X) = \sum_{i=1}^{n}X_{i} \in \{0,1,...,n\}$\
+Consider real function $g:\{0,1,...,n\} \to \mathbb{R}$\
+Let $\mathbb{E}_{\pi}[g(U(X))]=0$ hold for $\forall \pi\in(0,1)$. Then for all $\pi\in(0,1)$:\
+\begin{align*}
+0 &= \mathbb{E}_{\pi}[g(U(X))] = \sum_{k=0}^{n} g(k)\mathbb{P}_{\pi}(U(X)=k)\\
+&= \sum_{k=0}^{n} g(k)\binom{n}{k}\pi^k(1-\pi)^{n-k} ,\ for\ U(X)=\sum_{i=1}^{n}X_{i}\overset{i.i.d.}\sim {\sf Bin}(n, \pi)\\
+ &=\underbrace{(1-\pi)^n}_\text{>0} \sum_{k=0}^{n} \underbrace{g(k)\binom{n}{k}}_{:=a_k} \underbrace{(\frac{\pi}{1-\pi})^k}_{:=x\in(0, \infty)}\end{align*}
+(Using the hint of Ex.3 Q3)
+ \begin{align*}
+&\Leftrightarrow 0=a_k=g(k)\underbrace{\binom{n}{k}}_{>0},\  \forall k\in\{0,1,...,n\}\\
+&\Leftrightarrow \mathbb{P}_{\pi}(g(U(x))=0)=1,\ \forall  \pi\in(0,1)
+\end{align*}
+So, U(X) is complete, and hence minimal sufficient for $\pi$ as reasoned above.
+\newpage
+(c)\
+For $U(X)=\sum_{i=1}^{n}X_{i}\overset{i.i.d.}\sim {\sf Bin}(n, \pi),\ \mathbb{E}(U(X))=n\pi,\ Var(U(X))=n\pi(1-\pi)$, \
+ \begin{align*}
+\mathbb{E}[V(X)] &= \mathbb{E}[\frac{U(X)[U(X)-1]}{n(n-1)}]\\
+&= \frac{1}{n(n-1)} (\mathbb{E}[(U(X))^2]-\mathbb{E}[U(X)])\\
+&= \frac{1}{n(n-1)} (\mathbb{E}[(U(X))^2]-(\mathbb{E}[U(X)])^2 +(\mathbb{E}[U(X)])^2 -\mathbb{E}[U(X)])\\
+&= \frac{1}{n(n-1)} (Var[U(X)] +(\mathbb{E}[U(X)])^2 -\mathbb{E}[U(X)])\\
+&= \frac{1}{n(n-1)} (n\pi(1-\pi) +(n\pi)^2 -n\pi)\\
+&= \frac{1}{n(n-1)} (-n\pi^2 +(n\pi)^2)=\pi^2\\
+\end{align*}
+$\Rightarrow$ V(X) is unbiased for $\pi^2$.

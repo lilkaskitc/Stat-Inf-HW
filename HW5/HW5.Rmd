@@ -1,0 +1,68 @@
+---
+title: "HW6"
+output:  pdf_document
+date: "30/05/2024"
+header-includes:
+   - \usepackage{amsmath}
+   - \usepackage{setspace}\onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1(a)\
+$P(R_{max}\leq r)=P(R_1\leq r, ...,R_n\leq r)=\prod_{i=1}^n P(R_i\leq r)=(F_R(r))^n$  , given $R_1,...,R_n \ i.i.d.$\
+Rewrite $f(r)=\frac{2r}{\rho^2} \ for \ r\in[0,\rho]$, then integrate wrt. r,\
+\
+$F_R(r)=\begin{cases} 0 & for \ r < 0\\  \frac{r^2}{\rho^2} & for \ r\in[0,\rho] \\ 1 & for \ r > \rho \end{cases}$ \ 
+\
+\
+Hence, we have $F_{R_{max}}(r)=P(R_{max}\leq r)=\frac{r^{2n}}{\rho^{2n}} \ for \ r\in[0,\rho]$
+\begin{align*} f_{R_{max}}(r \mid \rho)&=\frac{d}{dr}F_{R_{max}}(r \mid \rho)\\
+&=\frac{2nr^{2n-1}}{\rho^{2n}} \qquad for \ r\in[0,\rho]\\
+&= 2nr^{2n-1} \cdot \frac{1}{\rho^{2n}} \mathbb{I}_{[0,\rho]}(r) \end{align*}\
+By factorization theorem, $R_{max}$ is sufficient for $\rho$.\
+\
+(b) Given the setting that random distances cannot exceed radius, so $P(R_{max} \leq \rho)=1$. As the distance measure is continuous, then $P(R_{max} =\rho)=0  \Rightarrow P(R_{max} < \rho)=1$. Therefore, the bias of $R_{max}$ cannot be zero.\
+\
+(c)
+\begin{align*}
+\mathbb{E}(R_1)&=\int_{0}^{\rho} rf(r)  \; dr\\
+&=\int_{0}^{\rho} r\frac{2r}{\rho^2}  \; dr=\int_{0}^{\rho} \frac{2r^2}{\rho^2}  \; dr\\
+&=\left[ \frac{2}{\rho^2} \frac{r^3}{3} \right]_{0}^{\rho}\\
+&=\frac{2\rho}{3}\\
+Bias &= \mathbb{E}(\hat{\rho})-\rho\\
+&=\mathbb{E}(\frac{3}{2n}\sum_{i=1}^{n}R_i)-\rho \\
+&= \frac{3}{2n}\sum_{i=1}^{n}\mathbb{E}(R_i)-\rho \\
+&= \frac{3}{2}\mathbb{E}(R_1)-\rho    \qquad (since \ R_1,...,R_n \ i.i.d.)\\
+&=  \frac{3}{2}\frac{2\rho}{3}-\rho = 0
+\end{align*}
+(d) $R_{max}$ and $\hat{\rho}$ satisfied assumptions to apply RB. As proved in part (a), $R_{max}$ is sufficient for $\rho$. As proved in part (c), $\hat{\rho}$ is unbiased for $\rho$.\
+First, derive conditional expectation for fixed $R_{max}=t\in [0,\rho]$:\
+\begin{align*}
+\mathbb{E}_{\rho}[\hat{\rho} \mid R_{max}=t]&=\mathbb{E}_{\rho}[\frac{3}{2n}\sum_{i=1}^{n}R_i \mid R_{max}=t]\\
+&=\frac{3}{2n}\sum_{i=1}^{n}\mathbb{E}_{\rho}[R_i \mid R_{max}=t]\\
+&=\frac{3}{2n}[t+\sum_{i=2}^{n}\mathbb{E}_{\rho}[R_i \mid R_1=t]]   \qquad   (W.L.O.G. \ take\ R_1 \ as \ R_{max})\\
+&= \frac{3}{2n}[t+(n-1)\frac{2t}{3}]  \qquad   (from \ part(c)\ \mathbb{E}(R_i) \ with\ upper\ bound\ replaced\ by\ t)\\
+&=\frac{3t}{2n}+\frac{(n-1)t}{n}\\
+&=\frac{2n+1}{2n}t
+\end{align*}
+$\Rightarrow \hat{\rho}^* = \frac{2n+1}{2n}R_{max}$\
+\newpage
+(e) Since RB estimator $\hat{\rho}^*$ is unbiased for $\rho$,
+\begin{align*}
+\rho&=\mathbb{E}_{\rho}[\frac{2n+1}{2n}R_{max}]=\frac{2n+1}{2n}\mathbb{E}_{\rho}[R_{max}]\\
+\Rightarrow \mathbb{E}_{\rho}[R_{max}]&=\frac{2n}{2n+1}\rho\\
+Bias_{\rho}[R_{max}]&=\mathbb{E}_{\rho}[R_{max}]-\rho=\frac{-1}{2n+1}\rho
+\end{align*}
+(f)\begin{align*}
+MSE_{\rho}[R_{max}]&=(Bias_{\rho}[R_{max}])^2+Var_{\rho}[R_{max}]\\
+&=(\frac{-1}{2n+1}\rho)^2+\mathbb{E}_{\rho}[R_{max}^2]-(\mathbb{E}_{\rho}[R_{max}])^2\\
+&=\frac{\rho^2}{(2n+1)^2}+\frac{n}{n+1}\rho^2-(\frac{2n}{2n+1}\rho)^2    \qquad   (Given \  \mathbb{E}_{\rho}[R_{max}^2]=\frac{n}{n+1}\rho^2)\\
+&=\rho^2[\frac{(n+1)(1-4n^2)+n(2n+1)^2}{(n+1)(2n+1)^2}]\\
+&=\rho^2[\frac{(2n+1)}{(n+1)(2n+1)^2}]\\
+&=\frac{\rho^2}{(n+1)(2n+1)}
+\end{align*}
+ 
+ 
+

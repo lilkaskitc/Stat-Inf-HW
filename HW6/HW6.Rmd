@@ -1,0 +1,70 @@
+---
+title: "HW6"
+output:  pdf_document
+date: "06/06/2024"
+header-includes:
+   - \usepackage{titling}
+   - \setlength{\droptitle}{-1.1in}
+   - \usepackage{amsmath}
+   - \usepackage{setspace}\onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1\
+In the lecture, we obtain that $\sqrt{n}(S_n^2-\sigma^2) \xrightarrow{d} N(0, \mu_4-\sigma^4)$.\
+Let $\theta=\sigma^2,\qquad \hat{\theta_n}=S_n^2,\qquad V(\theta)=\mu_4-\sigma^4$ and\
+$h:\mathbb{R}\rightarrow \mathbb{R}, \qquad h(\theta)=h(\sigma^2)=\sqrt{\sigma^2}=\sigma$\
+\
+Now check conditions to apply the Delta method are fulfilled:
+\begin{align*} \frac{dh(\theta)}{d\theta}=\frac{d}{d(\sigma^2)}\sigma=\frac{1}{2\sigma} \end{align*}
+so $h$ is continuously differentiable with $h'(\theta) \neq 0$.\
+\
+Apply Delta method,
+\begin{align*}
+\sqrt{n}(S_n^2-\sigma^2) &\xrightarrow{d} N(0, \mu_4-\sigma^4)\\
+\Rightarrow \sqrt{n}(S_n-\sigma) &\xrightarrow{d} N(0, (\frac{1}{2\sigma})^2(\mu_4-\sigma^4))\\
+\Rightarrow \sqrt{n}(S_n-\sigma) &\xrightarrow{d} N(0, \frac{\mu_4-\sigma^4}{4\sigma^2})
+\end{align*}
+Q2\
+(a) By the Geometric distribution and our survey context, the percentage of birds infected can be understood as the probability of success in Geometric distribution. Hence, using notation given in the question, we have the hypotheses $H_0:\pi=\pi_0=0.13 \quad vs. \quad H_1:\pi=\pi_1=0.1$.\
+(b)\begin{align*} 
+\Lambda(\textbf{x}) &= \frac{f(\textbf{x} \mid \pi_1)}{f(\textbf{x} \mid \pi_0)}\\
+&= \prod_{i=1}^{20}\frac{f(x_i \mid \pi_1)}{f(x_i \mid \pi_0)} \qquad for \ X_i \overset{i.i.d.}{\sim}Geo(\pi)\\
+&= \prod_{i=1}^{20}\frac{\pi_1(1-\pi_1)^{x_i-1}}{\pi_0(1-\pi_0)^{x_i-1}}\\
+&= (\frac{\pi_1}{\pi_0})^{20} (\frac{1-\pi_1}{1-\pi_0})^{z-20} \qquad for \ z:= \sum_{i=1}^{20}x_i \ge 20
+\end{align*}
+(c) Since we have set $\pi_0=0.13, \ \pi_1=0.1 \Rightarrow 1 > \pi_0 > \pi_1 > 0$, then $1> (\frac{\pi_1}{\pi_0})^{20} >0$ and $\frac{1-\pi_1}{1-\pi_0} > 1$. So, consider $\Lambda(\textbf{x})$ as a function of $z$, it is monotonically increasing in $z$ and hence invertible.
+\newpage
+(d)(i) For simple null- and alternative hypotheses, this LR-test is also the most powerful test by Neyman-Pearson lemma.
+\begin{align*}
+\phi^{*}(\textbf{x})=\begin{cases} 1 & if \ \Lambda(\textbf{x})>k_{\alpha}\\  \gamma_{\alpha}^{*} & if \ \Lambda(\textbf{x}) =k_{\alpha} \\ 0 & if \ \Lambda(\textbf{x})<k_{\alpha} \end{cases}
+\end{align*}  
+with critical value $k_{\alpha}$ and randomization constant $\gamma_{\alpha}^{*}$. From (c), $\Lambda(\textbf{x})$ as function of $z$ is monotonically increasing and invertible,
+\begin{align*}
+\Lambda(\textbf{x})>k_{\alpha} \Leftrightarrow \Lambda(z)>k_{\alpha} \Leftrightarrow z> \underbrace{\Lambda^{-1}(k_{\alpha})}_{=:c_{\alpha}} \qquad (accordingly \ for\  = \ and \ <)
+\end{align*}  
+So, the test expressed in terms of $z$:
+\begin{align*}
+\phi^{*}(z)=\begin{cases} 1 & if \ z>c_{\alpha}\\  \gamma_{\alpha}^{*} & if \ z =c_{\alpha} \\ 0 & if \ z<c_{\alpha} \end{cases}
+\end{align*} 
+(ii)The randomization is necessary, since $Z \sim NegBin(20, \pi)$ as mentioned in the hints, which is a discrete random variable and $P(Z=c_{\alpha}) \ne 0$. It helps to construct test at exact level $\alpha$ and maximize power.\
+Since $\Lambda(\textbf{X})$ is monotonically increasing in $Z= \sum_{i=1}^{20}X_i$, choose critical value $c_{\alpha}$ such that:
+\begin{align*}
+\begin{cases} P_{\pi_0}(Z>c_{\alpha}) \le \alpha \\  P_{\pi_0}(Z \ge c_{\alpha}) \ge \alpha  \end{cases}
+\end{align*}
+For significance level 5% and the table provided in the question, $c_{\alpha}=190$ satisfies the above conditions.\
+(iii) The randomization constant $\gamma_{\alpha}$ follows from size condtion $\mathbb{E}_{\pi_0}[\phi(\textbf{X})]=\alpha$:
+\begin{align*}
+\mathbb{E}_{\pi_0}[\phi(\textbf{X})] &= 1 \cdot P_{\pi_0}(Z>c_{\alpha})+ \gamma_{\alpha} \cdot P_{\pi_0}(Z=c_{\alpha})\\
+&= P_{\pi_0}(Z>190)+ \gamma_{\alpha} \cdot P_{\pi_0}(Z=190)\\
+&= (1-0.9503)+ \gamma_{\alpha} \cdot (0.9503-0.9477)\\
+&= 0.0497 + \gamma_{\alpha} \cdot 0.0026 \overset{!}{=} \alpha = 0.05
+\end{align*}
+$\Longrightarrow \gamma_{\alpha} = 0.1154$\
+(iv) From the result of previous parts, the test can be written as:
+\begin{align*}
+\phi^{*}(Z)=\begin{cases} 1 & if \ Z>190\\  0.1154 & if \ Z =190 \\ 0 & if \ Z<190 \end{cases}
+\end{align*}
+(e) Given that a total of 640 birds are examined by 20 people in the survey, observed $z=640$. Applying the test, we can conclude the researcher's claim is rejected at 5% significance level, in favour of the alternative that 10% of birds are infected.

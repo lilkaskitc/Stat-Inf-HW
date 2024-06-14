@@ -1,0 +1,136 @@
+---
+title: "HW7"
+output:  pdf_document
+date: "13/06/2024"
+header-includes:
+   - \usepackage{titling}
+   - \setlength{\droptitle}{-1.1in}
+   - \usepackage{amsmath}
+   - \usepackage{setspace}\onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1(a) Likelihood:\begin{align*}
+L(\lambda,\mu)&=f(\textbf{x},\textbf{y} \mid \lambda,\mu)\\
+&=f(x_1,\dots,x_m \mid \lambda)f(y_1,\dots,y_n \mid \mu) \qquad (\textbf{X},\textbf{Y} \ independent)\\
+&=\prod_{i=1}^{m}f(x_i \mid \lambda)\prod_{j=1}^{n}f(y_j \mid \mu) \qquad \left( X_i \overset{i.i.d.}{\sim}Exp(\lambda), \ Y_j \overset{i.i.d.}{\sim}Exp(\mu) \right)
+\end{align*}
+Log-likelihood:\begin{align*}
+l(\lambda,\mu)&=log \left( \prod_{i=1}^{m}f(x_i \mid \lambda)\prod_{j=1}^{n}f(y_j \mid \mu) \right)\\
+&=\sum_{i=1}^{m}log \ f(x_i \mid \lambda)+\sum_{j=1}^{n}log \ f(y_j \mid \mu)\\
+&=\sum_{i=1}^{m}log(\lambda \ exp(-\lambda x_i))+\sum_{j=1}^{n}log(\mu \ exp(-\mu y_j))\\
+&=m \ log \ \lambda -\lambda m \bar{x}+n \ log \ \mu -\mu n \bar{y}
+\end{align*}
+Score function:\begin{align*}
+s( \lambda,\mu \mid \textbf{x},\textbf{y} )&= \left( \frac{\partial l(\lambda,\mu)}{\partial \lambda}, \ \frac{\partial l(\lambda,\mu)}{\partial \mu} \right)^T\\
+&= \left( \frac{m}{\lambda}-m \bar{x}, \ \frac{n}{\mu}-n \bar{y} \right) ^T \overset{!}{=}(0,0)^T\\
+&\Leftrightarrow \begin{cases}
+\frac{m}{\lambda}=m \bar{x} \\
+\frac{n}{\mu}=n \bar{y} 
+\end{cases}\\
+\Rightarrow (\hat{\lambda}_{ML}, \ \hat{\mu}_{ML})^T&= \left( \frac{1}{\bar{X}}, \ \frac{1}{\bar{Y}} \right)^T
+\end{align*}
+(b)\begin{align*}
+\mathbb{E}[V(\textbf{X},\textbf{Y})]&= \left( \mathbb{E} \left( \frac{1}{\hat{\lambda}_{ML}} \right), \ \mathbb{E} \left( \frac{1}{\hat{\mu}_{ML}} \right) \right) ^T\\
+&= (\mathbb{E} (\bar{X}), \ \mathbb{E} (\bar{Y}))^T\\
+&= \left( \frac{1}{m}\sum_{i=1}^{m} \mathbb{E}(X_i), \ \frac{1}{n}\sum_{j=1}^{n} \mathbb{E} (Y_j) \right) ^T\\
+&= \left( \frac{1}{\lambda},\frac{1}{\mu} \right) ^T \qquad \left( X_i \overset{i.i.d.}{\sim}Exp(\lambda), \ Y_j \overset{i.i.d.}{\sim}Exp(\mu) \right) \\
+Cov(V(\textbf{X},\textbf{Y}))&=Cov \left( \left( \frac{1}{\hat{\lambda}_{ML}}, \ \frac{1}{\hat{\mu}_{ML}} \right) ^T \right) \\
+&=Cov(( \bar{X}, \  \bar{Y})^T)\\
+&=\begin{pmatrix}
+Var(\bar{X})&0\\
+0&Var(\bar{Y})
+\end{pmatrix}  \qquad (\textbf{X},\textbf{Y} \ independent) \\
+&=\begin{pmatrix}
+\frac{1}{m^2}Var(\sum_{i=1}^{m}X_i)&0\\
+0&\frac{1}{n^2}Var(\sum_{j=1}^{n}Y_j)
+\end{pmatrix}  \\
+&=\begin{pmatrix}
+\frac{1}{m\lambda^2}&0\\
+0&\frac{1}{n\mu^2}
+\end{pmatrix}  \qquad \left( X_i \overset{i.i.d.}{\sim}Exp(\lambda), \ Y_j \overset{i.i.d.}{\sim}Exp(\mu) \right)
+\end{align*}
+(c) Based on the given assumption on $V(\textbf{X},\textbf{Y})$, we let $\boldsymbol{\theta} = (\frac{1}{\lambda}, \frac{1}{\mu})^T, \   \hat{\boldsymbol{\theta}}_{n}=V(\textbf{X},\textbf{Y}), \ V(\boldsymbol{\theta})= \mathbf{\Sigma}_V$ for Delta method notation.
+\begin{align*}
+\begin{pmatrix}
+\sqrt{m} &0\\
+0& \sqrt{n}
+\end{pmatrix} 
+(\hat{\boldsymbol{\theta}}_{n}-\boldsymbol{\theta}) \xrightarrow{d} N_2(\boldsymbol{0},V(\boldsymbol{\theta}))
+\end{align*}
+Let $h:\mathbb{R}^2 \rightarrow \mathbb{R}^2, \qquad h(\boldsymbol{\theta})=h((\frac{1}{\lambda}, \frac{1}{\mu})^T)=(\lambda, \mu)^T$\
+Now check conditions to apply the Delta method are fulfilled:
+\begin{align*} 
+H(\boldsymbol{\theta})&= \left( \frac{\partial h(\boldsymbol{\theta})}{\partial \lambda}, \ \frac{\partial h(\boldsymbol{\theta})}{\partial \mu} \right) \\
+&=\begin{pmatrix}
+1&0\\
+0&1
+\end{pmatrix} 
+\end{align*}
+so, $H$ is of full rank $r=2$ while every row not equal to zero vector. $h$ is component-wise continuously partially differentiable.\
+Apply Delta method,
+\begin{align*}
+h(\hat{\boldsymbol{\theta}}_{n})&=T(\textbf{X},\textbf{Y})\\
+\begin{pmatrix}
+\sqrt{m} &0\\
+0& \sqrt{n}
+\end{pmatrix} (h(\hat{\boldsymbol{\theta}}_{n})-h(\boldsymbol{\theta})) &\xrightarrow{d} N_2(0,H(\boldsymbol{\theta})V(\boldsymbol{\theta})H(\boldsymbol{\theta})^T)\\
+\begin{pmatrix}
+\sqrt{m} &0\\
+0& \sqrt{n}
+\end{pmatrix} (T(\textbf{X},\textbf{Y})-(\lambda, \mu)^T) &\xrightarrow{d} N_2 \left( 0,\begin{pmatrix}
+1&0\\
+0&1
+\end{pmatrix} \boldsymbol{\Sigma}_V \begin{pmatrix}
+1&0\\
+0&1
+\end{pmatrix} \right) \\
+\implies T(\textbf{X},\textbf{Y}) &\overset{a}{\sim} N_2 \left( (\lambda, \mu)^T, \begin{pmatrix}
+\sqrt{m} &0\\
+0& \sqrt{n}
+\end{pmatrix}^{-1} \boldsymbol{\Sigma}_V \begin{pmatrix}
+\sqrt{m} &0\\
+0& \sqrt{n}
+\end{pmatrix}^{-T} \right)
+\end{align*}
+(d) Since Cramer-Rao bound for $T(\textbf{X},\textbf{Y})$ is $I^{-1} ((\lambda, \mu)^T)$,
+\begin{align*}
+I((\lambda, \mu)^T)&=\mathbb{E}_{\lambda, \mu} \left[ -\frac{\partial s( \lambda,\mu \mid \textbf{X},\textbf{Y} ) }{\partial (\lambda, \mu)} \right]\\
+&=\mathbb{E}_{\lambda, \mu} \left[ -\begin{pmatrix}
+\frac{-m}{\lambda^2}&0\\
+0&\frac{-n}{\mu^2}
+\end{pmatrix} \right]\\
+&=\begin{pmatrix}
+\frac{m}{\lambda^2}&0\\
+0&\frac{n}{\mu^2}
+\end{pmatrix}\\
+I^{-1} ((\lambda, \mu)^T)&=\frac{\lambda^2 \mu^2}{mn}\begin{pmatrix}
+\frac{n}{\mu^2}&0\\
+0&\frac{m}{\lambda^2}
+\end{pmatrix}\\
+&=\begin{pmatrix}
+\frac{\lambda^2}{m}&0\\
+0&\frac{\mu^2}{n}
+\end{pmatrix}
+\end{align*}
+For single observation $(X_i, \  Y_j)$,
+\begin{align*}
+i^{-1} ((\lambda, \mu)^T)&=\begin{pmatrix}
+\lambda^2 &0\\
+0& \mu^2
+\end{pmatrix}
+\end{align*}
+Cramer-Rao bound is achieved if
+\begin{align*}
+&\boldsymbol{\Sigma}_V = i^{-1} ((\lambda, \mu)^T)\\
+&\Leftrightarrow \begin{cases}
+\frac{1}{\lambda^2}=\lambda^2\\
+\frac{1}{\mu^2} =\mu^2
+\end{cases} \\
+&\Leftrightarrow \begin{cases}
+\lambda =  1 \\
+\mu = 1
+\end{cases}  \qquad (consider \ real \ solution \ only \ and \ given \  \lambda, \ \mu>0)
+\end{align*}

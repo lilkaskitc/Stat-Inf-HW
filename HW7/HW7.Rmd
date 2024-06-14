@@ -122,7 +122,7 @@ i^{-1} ((\lambda, \mu)^T)&=\begin{pmatrix}
 0& \mu^2
 \end{pmatrix}
 \end{align*}
-Cramer-Rao bound is achieved if
+Asymptotic Cramer-Rao bound is achieved if
 \begin{align*}
 &\boldsymbol{\Sigma}_V = i^{-1} ((\lambda, \mu)^T)\\
 &\Leftrightarrow \begin{cases}

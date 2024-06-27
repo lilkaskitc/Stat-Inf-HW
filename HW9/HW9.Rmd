@@ -1,0 +1,51 @@
+---
+title: "HW9"
+output:  pdf_document
+date: "27/06/2024"
+header-includes:
+   - \usepackage{titling}
+   - \setlength{\droptitle}{-1.1in}
+   - \usepackage{amsmath}
+   - \usepackage{setspace}\onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1 Let $\textbf{X}^{(A)}=(X_1, \cdots ,X_{\theta} )^T, \ \textbf{X}^{(B)}=(X_{\theta +1}, \cdots ,X_{112} )^T$.
+\begin{align*}
+f_{\lambda_1 \mid \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 \mid \lambda_2 ,\alpha ,\theta ,\textbf{x} ) &= \frac{ f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )}{f_{ \lambda_2 ,\alpha ,\theta ,\textbf{X}}( \lambda_2 ,\alpha ,\theta ,\textbf{x} )}\\
+&\propto f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )\\
+&= f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta ) f_{ \lambda_1 , \lambda_2 \mid \alpha ,\theta }( \lambda_1 , \lambda_2 \mid \alpha ,\theta ) f_{ \alpha ,\theta }(  \alpha ,\theta )\\
+&\propto f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta ) f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta )   \qquad \text{(independent priors)}\\
+&\propto  f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta ) f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta ) \\
+&\propto  f_{\textbf{X}^{(A)} \mid \lambda_1 , \alpha ,\theta }(\textbf{x}^{(A)} \mid \lambda_1 , \alpha ,\theta ) f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta )   \qquad (X_i  \text{ iid and } \textbf{X}^{(B)} \text{ not depend on }  \lambda_1)\\
+&\propto \left( \prod_{i=1}^{\theta} \lambda_{1}^{x_i} exp(-\lambda_1) \right) \lambda_{1}^2  exp(-\alpha \lambda_1) \\
+&= \left(  \lambda_{1}^{\sum_{i=1}^{\theta} x_i} exp(-\theta \lambda_1) \right) \lambda_{1}^2  exp(-\alpha \lambda_1) \\
+&= \lambda_{1}^{2+ \sum_{i=1}^{\theta} x_i} exp(-\lambda_1 (\theta + \alpha)) 
+\end{align*}
+$\implies$ kernel of $Ga\left( 3+ \sum_{i=1}^{\theta} x_i ,  \alpha  + \theta \right)$
+\begin{align*}
+f_{\lambda_2 \mid \lambda_1 ,\alpha ,\theta ,\textbf{X}}(\lambda_2 \mid \lambda_1 ,\alpha ,\theta ,\textbf{x} ) &= \frac{ f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )}{f_{ \lambda_1 ,\alpha ,\theta ,\textbf{X}}( \lambda_1 ,\alpha ,\theta ,\textbf{x} )}\\
+&\propto f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )\\
+&= f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 \alpha ,\theta ) f_{ \lambda_1 , \lambda_2 \mid \alpha ,\theta }( \lambda_1 , \lambda_2 \mid \alpha ,\theta )  f_{ \alpha ,\theta }(  \alpha ,\theta )\\
+&\propto f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 \mid \alpha ,\theta ) f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta ) \qquad \text{(independent priors)}\\
+&\propto  f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 ,\alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta ) \\
+&\propto  f_{\textbf{X}^{(B)} \mid \lambda_2 , \alpha ,\theta }(\textbf{x}^{(B)} \mid \lambda_2 , \alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta )   \qquad (X_i  \text{ iid and } \textbf{X}^{(A)} \text{ not depend on }  \lambda_2)\\
+&\propto \left( \prod_{i=\theta+1}^{112} \lambda_{2}^{x_i} exp(-\lambda_2) \right) \lambda_{2}^2  exp(-\alpha \lambda_2) \\
+&= \left(  \lambda_{2}^{\sum_{i=\theta+1}^{112} x_i} exp(-(112- \theta ) \lambda_2) \right) \lambda_{2}^2  exp(-\alpha \lambda_2) \\
+&= \lambda_{2}^{2+ \sum_{i=\theta+1}^{112} x_i} exp(-\lambda_2 (112-\theta + \alpha)) 
+\end{align*}
+$\implies$ kernel of $Ga\left( 3+ \sum_{i=\theta+1}^{112} x_i ,  \alpha  + (112-\theta ) \right)$
+\newpage
+\begin{align*}
+f_{\alpha \mid \lambda_1 , \lambda_2 ,\theta ,\textbf{X}}(\alpha  \mid \lambda_1 , \lambda_2 ,\theta ,\textbf{x} ) &= \frac{ f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )}{f_{ \lambda_1 , \lambda_2 , \theta ,\textbf{X}}( \lambda_1 , \lambda_2 ,\theta ,\textbf{x} )}\\
+&\propto f_{\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{X}}(\lambda_1 , \lambda_2 ,\alpha ,\theta ,\textbf{x} )\\
+&= f_{\textbf{X} \mid \lambda_1 , \lambda_2 ,\theta }(\textbf{x} \mid \lambda_1 , \lambda_2 ,\theta ) f_{ \lambda_1 , \lambda_2 ,\alpha ,\theta }( \lambda_1 , \lambda_2 ,\alpha ,\theta )\\
+&\propto f_{ \lambda_1 , \lambda_2 \mid \alpha ,\theta }( \lambda_1 , \lambda_2 \mid \alpha ,\theta ) f_{ \alpha ,\theta }(  \alpha ,\theta )\\
+&= f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta ) f_{ \alpha ,\theta }(  \alpha ,\theta ) \qquad \text{(independent priors)}\\
+&= f_{ \lambda_1 \mid \alpha ,\theta }( \lambda_1 \mid \alpha ,\theta ) f_{ \lambda_2 \mid \alpha ,\theta }( \lambda_2 \mid \alpha ,\theta ) f_{ \alpha }(  \alpha) \qquad (\text{assumed fixed } \theta )\\
+&\propto \alpha^3 exp(-\alpha \lambda_1) \alpha^3 exp(-\alpha \lambda_2) \alpha^9  exp(-10\alpha)  \\
+&= \alpha^{15} exp(-\alpha (\lambda_1+ \lambda_2+10))
+\end{align*}
+$\implies$ kernel of $Ga\left( 16,  10+\lambda_1+ \lambda_2 \right)$

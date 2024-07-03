@@ -1,0 +1,41 @@
+---
+title: "HW10"
+output:  pdf_document
+date: "04/07/2024"
+header-includes:
+   - \usepackage{titling}
+   - \setlength{\droptitle}{-1.1in}
+   - \usepackage{amsmath}
+   - \usepackage{bm}
+   - \usepackage{enumitem}
+   - \usepackage{setspace}\onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Q1
+\begin{enumerate}[label=(\alph*)]
+\item The kernel of posterior density for $\bm{\beta} | \bm{y}, \bm{X}$ is not easily recognisable as any know distribution, so analytic solution may not be easily obtained and MH algorithm is then suitable for sampling from the posterior.\\
+Let $q(\bm{\beta_{new}} \mid \bm{\beta_{old}} )$ be the density of given proposal distribution $N_p(\bm{\beta_{old}},\widehat{Cov}(\bm{\hat{\beta}_{ML}}))$. The algorithm in pseudo code is as follows:
+  \begin{enumerate}[label=(\roman*)]
+    \item Set the staring value of $\bm{\beta^{(0)}}$, e.g. using prior mean $\bm{b_0}$.
+    \item For $t=1, \dots ,1000$:
+    \begin{enumerate}[label=\arabic*.]
+      \item Draw $\bm{\beta^*}$ from $q(\bm{\beta^*} \mid \bm{\beta^{(t-1)}} )$.
+      \item Compute the acceptance probability: $\alpha (\bm{\beta^*} \mid \bm{\beta^{(t-1)}})=min \left( 1, \frac{p(\bm{\beta}^* \mid \bm{y}, \bm{X}) q( \bm{\beta^{(t-1)}} \mid \bm{\beta^*} )}{p(\bm{\beta}^{(t-1)} \mid \bm{y}, \bm{X}) q(\bm{\beta^*} \mid \bm{\beta^{(t-1)}} )} \right)$
+      \item With probability $ \alpha (\bm{\beta^*} \mid \bm{\beta^{(t-1)}})$ set $\bm{\beta^{(t)}}=\bm{\beta^*}$. Else, set $\bm{\beta^{(t)}}=\bm{\beta^{(t-1)}}$.
+    \end{enumerate}
+    \item Optionally, discard first B iterations as burn-in.
+    \item Output samples $\bm{\beta^{(B+1)}}, \dots , \bm{\beta^{(1000)}}$.
+  \end{enumerate}
+\item Point estimates of individual parameters can be approximated from the generated random draws. The posterior mean is approximated by the sample average:
+\begin{align*}
+\mathbb{E}(\bm{\beta} \mid \bm{y}, \bm{X}) &\approx \frac{1}{1000-B} \sum_{t=B+1}^{1000} \bm{\beta}^{(t)}
+\end{align*}
+\item The credible interval can be defined via empirical quantiles of the respective random draws, e.g. 90\% credible interval:
+\begin{align*}
+\hat{Q}_{0.05}(\bm{\beta} \mid \bm{y} , \bm{X}) &\approx q_{0.05}(\bm{\beta^{(B+1)}}, \dots , \bm{\beta^{(1000)}}) \\
+\hat{Q}_{0.95}(\bm{\beta} \mid \bm{y} , \bm{X}) &\approx q_{0.95}(\bm{\beta^{(B+1)}}, \dots , \bm{\beta^{(1000)}})
+\end{align*}
+\end{enumerate}
